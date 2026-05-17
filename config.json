@@ -1,5 +1,5 @@
 {
-  "maintenance": true,
+  "maintenance": true → commit
   "maintenance_until": "",
   "eta_minutes": "5 à 10",
   "message_fr": "Mise à jour en cours",
