@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>MagotBudget</title>
+
+<!-- ROUTEUR : charge config.json et décide quoi afficher.
+     Exécuté AVANT le rendu pour éviter tout flash de contenu. -->
+<script>
+(async function(){
+  // Cache-bust le config.json pour toujours avoir la dernière version
+  var configUrl = 'config.json?t=' + Date.now();
+  var fallbackUrl = 'app.html';
+
+  function redirectToApp(version){
+    var sep = fallbackUrl.indexOf('?') === -1 ? '?' : '&';
+    var url = fallbackUrl + sep + 'v=' + encodeURIComponent(version || Date.now());
+    window.location.replace(url);
+  }
+
+  try {
+    var res = await fetch(configUrl, { cache: 'no-store' });
+    if(!res.ok) throw new Error('Config HTTP ' + res.status);
+    var config = await res.json();
+
+    // Determine if maintenance is active
+    var maintenanceActive = false;
+    if(config.maintenance === true) maintenanceActive = true;
+    if(config.maintenance_until){
+      try {
+        var untilTs = new Date(config.maintenance_until).getTime();
+        if(!isNaN(untilTs) && Date.now() < untilTs){
+          maintenanceActive = true;
+        }
+      } catch(_){}
+    }
+
+    if(!maintenanceActive){
+      // No maintenance → go straight to the app
+      redirectToApp(config.version);
+      return;
+    }
+
+    // Maintenance active → wait for DOM and apply config
+    window.__MB_CONFIG = config;
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', applyMaintenanceConfig);
+    } else {
+      applyMaintenanceConfig();
+    }
+  } catch(err){
+    // If config fails to load, default to the app (safety: don't lock users out)
+    console.error('Config load failed, defaulting to app:', err);
+    redirectToApp();
+  }
+
+  function applyMaintenanceConfig(){
+    var config = window.__MB_CONFIG || {};
+    // Detect language
+    var lang = (navigator.language || 'fr').toLowerCase();
+    var isEn = lang.indexOf('en') === 0;
+
+    // Apply title
+    var titleEl = document.getElementById('statusTitle');
+    if(titleEl){
+      titleEl.textContent = isEn
+        ? (config.message_en || 'Update in progress')
+        : (config.message_fr || 'Mise à jour en cours');
+    }
+
+    // Apply body description
+    var msgEl = document.getElementById('statusMessage');
+    if(msgEl){
+      msgEl.textContent = isEn
+        ? (config.body_en || 'We are improving your experience with a new faster and more polished version.')
+        : (config.body_fr || 'Nous améliorons votre expérience avec une nouvelle version plus rapide et plus aboutie.');
+    }
+
+    // Apply ETA
+    var etaTextEl = document.getElementById('etaText');
+    if(etaTextEl){
+      var etaMinutes = config.eta_minutes || '5 à 10';
+      etaTextEl.textContent = isEn
+        ? ('Back in approximately ' + etaMinutes + ' minutes')
+        : ('Retour estimé dans ' + etaMinutes + ' minutes');
+    }
+
+    // Apply contact prompt
+    var contactPromptEl = document.getElementById('contactPrompt');
+    if(contactPromptEl){
+      contactPromptEl.textContent = isEn
+        ? 'A question during maintenance?'
+        : 'Une question pendant la maintenance ?';
+    }
+
+    // Apply contact line
+    var contactLineEl = document.getElementById('contactLine');
+    if(contactLineEl){
+      var prefix = isEn ? 'Email us at ' : 'Écrivez-nous à ';
+      contactLineEl.innerHTML = prefix + '<a href="mailto:magotbudget@gmail.com">magotbudget@gmail.com</a>';
+    }
+
+    // Apply footer
+    var footerEl = document.getElementById('footer');
+    if(footerEl){
+      var thanks = isEn ? 'Thank you for your patience' : 'Merci de votre patience';
+      var version = config.version ? (' · v' + config.version) : '';
+      footerEl.textContent = '© 2026 MagotBudget · ' + thanks + version;
+    }
+
+    // Update tab title
+    document.title = isEn
+      ? 'MagotBudget — Update in progress'
+      : 'MagotBudget — Mise à jour en cours';
+
+    // Show the page
+    document.body.style.visibility = 'visible';
+
+    // Auto-reload every 60s to detect when maintenance ends
+    setTimeout(function(){
+      window.location.reload();
+    }, 60 * 1000);
+  }
+})();
+</script>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+body {
+  visibility: hidden;  /* hidden until router decides (avoids flash before redirect) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(13, 148, 136, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 100%, rgba(20, 184, 166, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
+  position: relative;
+}
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 30%, rgba(255,255,255,0.04) 1px, transparent 1px),
+    radial-gradient(circle at 75% 70%, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  animation: drift 30s linear infinite;
+}
+@keyframes drift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(80px, 80px); }
+}
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 40px 32px 32px;
+  text-align: center;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(13, 148, 136, 0.15) inset;
+  animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.logo {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 16px;
+  animation: float 4s ease-in-out infinite;
+  display: inline-block;
+  filter: drop-shadow(0 8px 24px rgba(13, 148, 136, 0.3));
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.app-name {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.tagline {
+  font-size: 13px;
+  color: rgba(241, 245, 249, 0.55);
+  margin-bottom: 32px;
+  letter-spacing: 0.02em;
+}
+.spinner-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 24px;
+}
+.spinner-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #0d9488;
+  border-right-color: rgba(13, 148, 136, 0.3);
+  animation: spin 1.2s linear infinite;
+}
+.spinner-ring-2 {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-bottom-color: #14b8a6;
+  border-left-color: rgba(20, 184, 166, 0.2);
+  animation: spin 1.8s linear infinite reverse;
+}
+.spinner-core {
+  position: absolute;
+  inset: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow:
+    0 4px 16px rgba(13, 148, 136, 0.4),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.15);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+.status-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.status-message {
+  font-size: 14px;
+  color: rgba(241, 245, 249, 0.7);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.eta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(13, 148, 136, 0.15);
+  border: 1px solid rgba(13, 148, 136, 0.30);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5eead4;
+  margin-bottom: 24px;
+}
+.eta-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #14b8a6;
+  box-shadow: 0 0 8px #14b8a6;
+  animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+.dot:nth-child(1) { animation-delay: 0s; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+.dot:nth-child(4) { animation-delay: 0.6s; }
+@keyframes dotPulse {
+  0%, 100% { background: rgba(255, 255, 255, 0.15); transform: scale(1); }
+  50%      { background: #0d9488; transform: scale(1.3); }
+}
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  margin: 24px 0;
+}
+.contact {
+  font-size: 12.5px;
+  color: rgba(241, 245, 249, 0.55);
+  line-height: 1.6;
+}
+.contact a {
+  color: #5eead4;
+  text-decoration: none;
+  font-weight: 600;
+}
+.contact a:hover { text-decoration: underline; }
+.footer {
+  margin-top: 24px;
+  font-size: 11.5px;
+  color: rgba(241, 245, 249, 0.35);
+  letter-spacing: 0.04em;
+}
+@media (max-width: 420px) {
+  .card { padding: 32px 24px 24px; border-radius: 20px; }
+  .app-name { font-size: 24px; }
+  .status-title { font-size: 18px; }
+  .status-message { font-size: 13.5px; }
+  .logo { font-size: 48px; }
+  .spinner-wrap { width: 76px; height: 76px; }
+  .spinner-core { inset: 22px; font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo, .spinner-ring, .spinner-ring-2, .spinner-core, .eta-dot, .dot, body::before {
+    animation: none !important;
+  }
+}
+</style>
+</head>
+<body>
+<main class="card" role="status" aria-live="polite">
+  <div class="logo" aria-hidden="true">🏠</div>
+  <h1 class="app-name">MagotBudget</h1>
+  <p class="tagline">Gestion économique du foyer</p>
+
+  <div class="spinner-wrap" aria-hidden="true">
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring-2"></div>
+    <div class="spinner-core">⚙️</div>
+  </div>
+
+  <h2 class="status-title" id="statusTitle">Mise à jour en cours</h2>
+  <p class="status-message" id="statusMessage">
+    Nous améliorons votre expérience avec une nouvelle version plus rapide et plus aboutie.
+  </p>
+
+  <div class="eta" aria-label="Temps estimé">
+    <span class="eta-dot"></span>
+    <span id="etaText">Retour estimé dans 5 à 10 minutes</span>
+  </div>
+
+  <div class="dots" aria-hidden="true">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="contact">
+    <span id="contactPrompt">Une question pendant la maintenance ?</span><br>
+    <span id="contactLine">Écrivez-nous à <a href="mailto:magotbudget@gmail.com">magotbudget@gmail.com</a></span>
+  </p>
+
+  <p class="footer" id="footer">© 2026 MagotBudget · Merci de votre patience</p>
+</main>
+</body>
+</html>
