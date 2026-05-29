@@ -19340,9 +19340,9 @@ async function save(){
     }
   }catch(e){}
   // ── Synchro famille : pousser vers Firebase après chaque sauvegarde ──
-  // Debounce 1.2s pour éviter les écritures multiples lors de saisies rapides
+  // Debounce 1.2s. On NE pousse PAS si on est en train de fusionner des données reçues (anti-boucle).
   try{
-    if(typeof FAMILY_SYNC!=='undefined' && FAMILY_SYNC.active && FAMILY_SYNC.masterKey){
+    if(typeof FAMILY_SYNC!=='undefined' && FAMILY_SYNC.active && FAMILY_SYNC.masterKey && !window._fsMerging){
       clearTimeout(window._fsPushTimer);
       window._fsPushTimer=setTimeout(function(){
         if(typeof fsPushAll==='function') fsPushAll().catch(function(){});
@@ -39961,6 +39961,7 @@ async function fsPushAll(){
     const ops=(S.ops||[]).filter(function(o){return !o.del;});
     const enc=await fsEncrypt({ops:ops, members:S.members||[], updatedBy:FAMILY_SYNC.memberId, ts:Date.now()}, FAMILY_SYNC.masterKey);
     await FAMILY_SYNC.db.collection('spaces').doc(FAMILY_SYNC.spaceId).collection('data').doc('vault').set(enc);
+    console.log('[fsync] ✅ Données envoyées vers Firebase ('+ops.length+' opérations)');
   }catch(e){
     _logErr('fsPushAll', e);
     // Rendre l'erreur visible (souvent = règles Firestore non publiées)
@@ -39998,7 +39999,12 @@ function fsMergeOps(remoteOps){
       if(rMod>lMod){ Object.assign(lo, ro); updated++; }
     }
   });
-  if(added||updated){ try{ save(); refreshAll(); }catch(_){} }
+  if(added||updated){
+    // Marquer qu'on est en train de fusionner pour empêcher save() de re-pousser (boucle)
+    window._fsMerging = true;
+    try{ save(); refreshAll(); }catch(_){}
+    window._fsMerging = false;
+  }
 }
 
 // ── Écoute temps réel ──
