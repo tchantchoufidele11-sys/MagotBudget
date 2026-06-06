@@ -11968,8 +11968,8 @@ body.is-lowend .modal {
 <!-- FIX v140 — PDF.js et Tesseract restent en CDN (lourds : ~2 MB combinés)
      mais avec fallback gracieux si offline. Le SW les précache, donc une fois
      chargées une fois avec Internet, elles fonctionnent ensuite hors ligne. -->
-<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v226] PDF.js indisponible (offline)')"></script>
-<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v226] Tesseract.js indisponible (offline)')"></script>
+<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v229] PDF.js indisponible (offline)')"></script>
+<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v229] Tesseract.js indisponible (offline)')"></script>
 
 <style id="v149-settings-css">
 /* ────────────────────────────────────────────────────────────────
@@ -13496,7 +13496,7 @@ body.amounts-hidden .ch-wrap2::after{
       // The version string is also embedded in the HTML below for detection
       // FIX v146 — version unique de l'app, lue par le SW pour le nom du cache.
       // Doit toujours rester égale à META.version (~ ligne 9023).
-      var APP_VERSION = 'v226';
+      var APP_VERSION = 'v229';
       var swCode = ''
         + 'const CACHE = "fbpro-' + APP_VERSION + '";'
         + 'const CACHE_LIST = ["fbpro-v1","fbpro-v2","fbpro-v3","fbpro-' + APP_VERSION + '"];'
@@ -13854,7 +13854,7 @@ body.amounts-hidden .ch-wrap2::after{
     <div class="tb-mob-brand" id="tbMobBrand">
       <svg width="28" height="28" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="border-radius:6px;flex-shrink:0"><defs><linearGradient id="tb28_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#d97706"/><stop offset="1" stop-color="#b45309"/></linearGradient><linearGradient id="tb28_ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a16207"/><stop offset="1" stop-color="#713f12"/></linearGradient><linearGradient id="tb28_li" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#a16207"/></linearGradient></defs><rect width="180" height="180" rx="40" fill="url(#tb28_bg)"/><rect x="42" y="78" width="96" height="62" rx="5" fill="url(#tb28_ch)"/><rect x="38" y="62" width="104" height="22" rx="6" fill="url(#tb28_li)"/><rect x="38" y="62" width="104" height="4" fill="#fef3c7" opacity="0.4"/><circle cx="90" cy="80" r="6" fill="#713f12"/><rect x="86" y="78" width="8" height="3" fill="#fde68a"/><text x="90" y="124" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fef3c7">€</text></svg>
       <div>
-        <div class="tb-app-name">MagotBudget <span style="font-size:10px;font-weight:600;color:#94a3b8;background:#f1f5f9;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle">v226</span></div>
+        <div class="tb-app-name">MagotBudget <span style="font-size:10px;font-weight:600;color:#94a3b8;background:#f1f5f9;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle">v229</span></div>
         <div class="tb-app-sub" id="tbPageSub">Vue d'ensemble du mois</div>
       </div>
     </div>
@@ -16404,6 +16404,8 @@ body.amounts-hidden .ch-wrap2::after{
         <div class="fg"><label data-i18n="modal.field.currency">Devise</label><select id="eCur"></select></div>
         <div class="fg"><label data-i18n="modal.field.date">Date</label><input type="date" id="eDt"/></div>
         <div class="fg full"><label data-i18n="modal.field.description">Description</label><input type="text" id="eDsc"/></div>
+        <div class="fg full" id="eReceiptRow" style="display:none"><button type="button" class="btn btn-ghost" style="width:100%" onclick="viewReceipt(document.getElementById('eId').value)">📎 Voir le justificatif</button></div>
+        <div class="fg full" id="eImpRow" style="display:none"><div style="font-size:12px;color:#64748b;background:#f1f5f9;border-radius:8px;padding:8px 10px;line-height:1.4">📑 <span id="eImpTxt"></span></div></div>
       </div>
     </div>
     <div class="mf">
@@ -23133,6 +23135,13 @@ function openEditOp(id){
   document.getElementById('eCur').value=op.cur;
   document.getElementById('eDt').value=op.dt;
   document.getElementById('eDsc').value=op.dsc||'';
+  var _rcRow=document.getElementById('eReceiptRow'); if(_rcRow) _rcRow.style.display = op.receipt ? '' : 'none';
+  var _impRow=document.getElementById('eImpRow');
+  if(_impRow){
+    var _imp=(op.imp && Array.isArray(S.imports)) ? S.imports.find(function(x){return x.id===op.imp;}) : null;
+    if(_imp){ var _it=document.getElementById('eImpTxt'); if(_it) _it.textContent=bkImpLabel(_imp); _impRow.style.display=''; }
+    else _impRow.style.display='none';
+  }
   openM('editModal');
 }
 function onEditTypeChange(){
@@ -25276,6 +25285,22 @@ function clearHistSearch(){
 }
 window.clearHistSearch = clearHistSearch;
 
+function histToggleHistGroup(){ window._histGroupBySource=!window._histGroupBySource; try{ renderHistory(); }catch(_){} }
+function _histGrpHeader(key, ops){
+  if(key==='T') return {ico:'🧾', label:'Tickets scannés'};
+  if(key==='M') return {ico:'✍️', label:'Saisies manuelles'};
+  var imp=(Array.isArray(S.imports)?S.imports.find(function(x){return x.id===key.slice(2);}):null);
+  return {ico:'🏦', label: imp?bkImpLabel(imp):'Relevé importé'};
+}
+function histToggleGroup(el){
+  if(!el) return; var k=el.getAttribute('data-grp'); if(!k) return;
+  var coll=el.classList.toggle('hist-grp-collapsed');
+  var car=el.querySelector('.hsh-caret'); if(car) car.style.transform=coll?'rotate(-90deg)':'';
+  var tb=el.closest('tbody'); if(!tb) return;
+  Array.prototype.forEach.call(tb.querySelectorAll('tr.hist-card-tr'),function(r){ if(r.getAttribute('data-grp')===k) r.style.display=coll?'none':''; });
+}
+window.histToggleHistGroup=histToggleHistGroup; window.histToggleGroup=histToggleGroup;
+
 function renderHistory(){
   const pd=getPd();
   const mbr=document.getElementById('hfMbr')?.value||'';
@@ -25385,6 +25410,8 @@ function renderHistory(){
       html+='<div class="hist-sum-card"><div class="hist-sum-lbl">'+(trUI('history.sum.average')||'Moyenne')+'</div><div class="hist-sum-val">'+fC(avg)+'</div><div class="hist-sum-sub">'+(trUI('history.sum.per_op')||'par opération')+'</div></div>';
     }
     html+='</div></td></tr>';
+    // [v229] Bouton bascule : par date ⇄ par relevé
+    html+='<tr><td colspan="6" style="padding:4px 2px 2px;border:0"><button type="button" class="btn btn-ghost" style="font-size:12px;padding:5px 12px;border-radius:999px" onclick="histToggleHistGroup()">'+(window._histGroupBySource?'📅 Revenir par date':'📑 Grouper par relevé')+'</button></td></tr>';
     var groups={}; var order=[];
     // Séparer futur / réalisé puis ordonner :
     //  • À venir d'abord, de la date la plus proche à la plus lointaine (croissant)
@@ -25408,19 +25435,40 @@ function renderHistory(){
         return t.toLocaleDateString(appDateLocale(),{weekday:'long',day:'numeric',month:'long'});
       }catch(_){ return d; }
     }
+    // [v229] Mode "groupé par relevé" : on remplace le regroupement par date par un regroupement par source.
+    if(window._histGroupBySource){
+      groups={}; order=[];
+      var _bk=function(o){ if(o.imp) return 'S:'+o.imp; if(o.src==='ticket'||o.receipt) return 'T'; return 'M'; };
+      list.forEach(function(o){ var k=_bk(o); (groups[k]||(groups[k]=[])).push(o); });
+      var _io=(Array.isArray(S.imports)?S.imports.slice():[]).sort(function(a,b){return new Date(b.at)-new Date(a.at);});
+      _io.forEach(function(im){ if(groups['S:'+im.id]) order.push('S:'+im.id); });
+      Object.keys(groups).forEach(function(k){ if(k.charAt(0)==='S' && order.indexOf(k)<0) order.push(k); });
+      if(groups['T']) order.push('T'); if(groups['M']) order.push('M');
+      order.forEach(function(k){ groups[k].sort(function(a,b){return new Date(b.dt)-new Date(a.dt);}); });
+    }
     var _hasFuture=_future.length>0, _sectFutureDone=false, _sectPastDone=false;
     order.forEach(function(dkey){
-      // En-tête de section « À venir » (avant le 1er groupe futur) puis « Opérations » (avant le 1er groupe réalisé)
-      var _grpIsFuture = groups[dkey].length && !_isPastFn(groups[dkey][0]);
-      if(_grpIsFuture && !_sectFutureDone){
-        html+='<tr><td colspan="6" style="padding:0;border:0"><div class="hist-section-hdr upcoming">'+(trUI('history.section.upcoming')||'À venir')+'</div></td></tr>';
-        _sectFutureDone=true;
+      if(window._histGroupBySource){
+        var _gi=_histGrpHeader(dkey, groups[dkey]);
+        var _gtot=groups[dkey].reduce(function(a,o){return a+safeAbAbs(o);},0);
+        html+='<tr class="hist-grp-sep"><td colspan="6" style="padding:0;border:0"><div data-grp="'+esc(dkey)+'" onclick="histToggleGroup(this)" style="display:flex;align-items:center;gap:8px;padding:10px 12px;margin:10px 0 2px;background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer">'
+          +'<span style="font-size:15px">'+_gi.ico+'</span>'
+          +'<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(_gi.label)+'</span>'
+          +'<span style="font-weight:600;font-size:11px;opacity:.9;white-space:nowrap">'+groups[dkey].length+'\u00a0·\u00a0'+fC(_gtot)+'</span>'
+          +'<span class="hsh-caret" style="display:inline-block;transition:transform .2s">\u25BE</span></div></td></tr>';
+      } else {
+        // En-tête de section « À venir » (avant le 1er groupe futur) puis « Opérations » (avant le 1er groupe réalisé)
+        var _grpIsFuture = groups[dkey].length && !_isPastFn(groups[dkey][0]);
+        if(_grpIsFuture && !_sectFutureDone){
+          html+='<tr><td colspan="6" style="padding:0;border:0"><div class="hist-section-hdr upcoming">'+(trUI('history.section.upcoming')||'À venir')+'</div></td></tr>';
+          _sectFutureDone=true;
+        }
+        if(!_grpIsFuture && !_sectPastDone && _hasFuture){
+          html+='<tr><td colspan="6" style="padding:0;border:0"><div class="hist-section-hdr">'+(trUI('history.section.done')||'Opérations')+'</div></td></tr>';
+          _sectPastDone=true;
+        }
+        html+='<tr class="hist-grp-sep"><td colspan="6" style="padding:0;border:0"><div class="hist-date-sep">'+esc(dateLabel(dkey))+'</div></td></tr>';
       }
-      if(!_grpIsFuture && !_sectPastDone && _hasFuture){
-        html+='<tr><td colspan="6" style="padding:0;border:0"><div class="hist-section-hdr">'+(trUI('history.section.done')||'Opérations')+'</div></td></tr>';
-        _sectPastDone=true;
-      }
-      html+='<tr class="hist-grp-sep"><td colspan="6" style="padding:0;border:0"><div class="hist-date-sep">'+esc(dateLabel(dkey))+'</div></td></tr>';
       groups[dkey].forEach(function(o){
         var t=opType(o);
         var isRev=t==='rev', isSav=t==='save';
@@ -25432,7 +25480,7 @@ function renderHistory(){
         var safeId=esc(o.id), safeTbody=esc(tbodyId);
         var futureMark=isFuture?'<span class="hist-card-future-pill">'+(trUI('history.upcoming')||'\u00C0 venir')+'</span>':'';
         var authorLine=o.author?(' \u00b7 \u270E '+esc(o.author)):'';
-        html+='<tr class="hist-card-tr"><td colspan="6" style="padding:0;border:0">';
+        html+='<tr class="hist-card-tr" data-grp="'+esc(dkey)+'"><td colspan="6" style="padding:0;border:0">';
         html+='<div class="hist-card'+(isFuture?' op-future-row':'')+'">';
         if(isFuture){
           // Opération à venir (récurrence pas encore débitée) : lecture seule.
@@ -29442,7 +29490,7 @@ function mbSmartRoute(rawText, b64, opts){
   if(cls.type==='statement'){
     var rows = opts.statementRows ? opts.statementRows() : bkRowsFromOcrText(rawText);
     if(rows && rows.length){
-      BK_IMPORT={ mode:'ofx', rows:rows, grid:[], hasHeader:false, ncols:0, map:{} };
+      BK_IMPORT={ mode:'ofx', rows:rows, grid:[], hasHeader:false, ncols:0, map:{}, srcText:rawText };
       bkOpenWizard();
       return;
     }
@@ -29514,7 +29562,7 @@ function doImportBank(input){
           bkOcrScannedPdf(res.pdf).then(function(txt){
             var ocrRows=bkRowsFromOcrText(txt);
             if(ocrRows && ocrRows.length){
-              BK_IMPORT={ mode:'ofx', rows:ocrRows, grid:[], hasHeader:false, ncols:0, map:{} };
+              BK_IMPORT={ mode:'ofx', rows:ocrRows, grid:[], hasHeader:false, ncols:0, map:{}, srcText:txt };
               bkOpenWizard();
             } else {
               // OCR sans résultat exploitable → flux standard (diagnostic clair)
@@ -29544,12 +29592,12 @@ function doImportBank(input){
       if(/<OFX>|OFXHEADER|<STMTTRN>/i.test(text)){
         var rows=bkParseOFX(text).filter(function(r){return !isNaN(r.amount);});
         if(!rows.length){ showToast('bk.import.none',true); return; }
-        BK_IMPORT={ mode:'ofx', rows:rows, grid:[], hasHeader:false, ncols:0, map:{} };
+        BK_IMPORT={ mode:'ofx', rows:rows, grid:[], hasHeader:false, ncols:0, map:{}, srcText:text };
         bkOpenWizard();
       } else {
         var p=bkParseCSV(text);
         if(!p.grid.length){ showToast('bk.import.none',true); return; }
-        BK_IMPORT.grid=p.grid; BK_IMPORT.mode='single';
+        BK_IMPORT.grid=p.grid; BK_IMPORT.mode='single'; BK_IMPORT.srcText=text;
         BK_IMPORT.ncols=Math.max.apply(null,p.grid.map(function(r){return r.length;}));
         bkAutoDetect();
         bkOpenWizard();
@@ -29760,9 +29808,62 @@ function bkUpdateImportCount(){
 }
 window.bkUpdateImportCount=bkUpdateImportCount;
 
+// ═══ [v228] Référence légère d'un relevé importé (sans PDF) + libellé du dossier ═══
+function bkExtractStmtRef(text, rows){
+  var src=text||'';
+  var t=src.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  var banks=[
+    ['brie picardie','Crédit Agricole Brie Picardie'],['credit agricole','Crédit Agricole'],
+    ['bnp paribas','BNP Paribas'],['societe generale','Société Générale'],
+    ['caisse d','Caisse d\'Épargne'],['banque populaire','Banque Populaire'],
+    ['credit mutuel','Crédit Mutuel'],['la banque postale','La Banque Postale'],
+    ['boursorama','Boursorama'],['fortuneo','Fortuneo'],['hello bank','Hello bank!'],
+    ['monabanq','Monabanq'],['revolut','Revolut'],['n26','N26'],['nickel','Nickel'],
+    ['\\blcl\\b','LCL'],['\\bcic\\b','CIC'],['hsbc','HSBC'],['\\bing\\b','ING']
+  ];
+  var bank='';
+  for(var i=0;i<banks.length;i++){ if(new RegExp(banks[i][0]).test(t)){ bank=banks[i][1]; break; } }
+  var no='';
+  var mno=/relev[ée][^\n]{0,24}?n[°o]?\s*[:.]?\s*0*(\d{1,6})/i.exec(src) || /\bn[°o]\s*0*(\d{2,6})\b/.exec(src);
+  if(mno) no=mno[1];
+  var acct='';
+  var mib=/[A-Z]{2}\d{2}[ A-Z0-9]{10,34}/.exec(src.toUpperCase());
+  if(mib){ var d=mib[0].replace(/\D/g,''); if(d.length>=4) acct=d.slice(-4); }
+  if(!acct){ var longs=src.match(/\d{6,}/g); if(longs&&longs.length){ longs.sort(function(a,b){return b.length-a.length;}); acct=longs[0].slice(-4); } }
+  var period='';
+  try{
+    var cnt={},best='',bn=-1;
+    (rows||[]).forEach(function(r){ var p=(r.date||'').slice(0,7); if(/^\d{4}-\d{2}$/.test(p)) cnt[p]=(cnt[p]||0)+1; });
+    Object.keys(cnt).forEach(function(p){ if(cnt[p]>bn){bn=cnt[p];best=p;} });
+    period=best;
+  }catch(_){}
+  return { bank:bank, no:no, acct:acct, period:period };
+}
+function _bkPeriodFr(p){
+  if(!/^\d{4}-\d{2}$/.test(p||'')) return '';
+  var mo=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var a=p.split('-'); return (mo[parseInt(a[1],10)-1]||'')+' '+a[0];
+}
+function bkImpLabel(imp){
+  if(!imp) return '';
+  var parts=[];
+  if(imp.bank) parts.push(imp.bank);
+  if(imp.no) parts.push('Relevé n°'+imp.no);
+  var per=_bkPeriodFr(imp.period); if(per) parts.push(per);
+  if(imp.acct) parts.push('compte ••• '+imp.acct);
+  var s=parts.join(' · ') || 'Relevé importé';
+  if(imp.at){ try{ s+=' — importé le '+new Date(imp.at).toLocaleDateString('fr-FR'); }catch(_){} }
+  return s;
+}
+window.bkExtractStmtRef=bkExtractStmtRef; window.bkImpLabel=bkImpLabel;
+
 function bkConfirmImport(){
   var rows=BK_IMPORT._built||bkBuildRows();
   if(!rows.length){ showToast('bk.import.none',true); return; }
+  // [v228] Fiche du relevé (référence légère, sans PDF) + étiquette posée sur chaque opération.
+  if(!Array.isArray(S.imports)) S.imports=[];
+  var _impRef=bkExtractStmtRef(BK_IMPORT.srcText||'', rows);
+  var _impId='R-'+(Date.now().toString(36)+Math.random().toString(36).slice(2,5)).toUpperCase().slice(-7);
   var existing={};
   (S.ops||[]).forEach(function(o){ if(!o.del){ existing[(o.dt||'')+'|'+Math.abs(o.amt||0).toFixed(2)+'|'+String(o.dsc||'').trim().toLowerCase()]=true; } });
   var added=0,skipped=0;
@@ -29784,8 +29885,9 @@ function bkConfirmImport(){
     }catch(_){}
     if(!chosenCat) chosenCat = (type==='rev')?'Revenus occasionnels — Gains exceptionnels':(type==='dep'?'VIE COURANTE — ACHATS DIVERS':(r.suggestedCat||''));
     var finalCat=chosenCat; var op=normalizeOp({ date:r.date, amount:Math.abs(r.amount), label:(r.label||'').slice(0,120), cat:finalCat, cur:S.cur }, type);
-    S.ops.push(op); added++;
+    if(op){ op.src='statement'; op.imp=_impId; S.ops.push(op); added++; }
   });
+  if(added>0){ S.imports.push({ id:_impId, bank:_impRef.bank, no:_impRef.no, acct:_impRef.acct, period:_impRef.period, at:new Date().toISOString(), n:added }); }
   closeM('csvImportModal');
   if(added>0){
     try{ save(); }catch(e){}
@@ -46204,7 +46306,7 @@ function ocrConfirmTicket(){
       var _gf=true;
       _cats.forEach(function(c){
         var o=normalizeOp({ date:date, label:store.slice(0,80), amount:_grp[c], cat:c, member:mbr, receipt:(_gf?receipt:null), cur:S.cur }, 'dep');
-        if(o){ S.ops.push(o); }
+        if(o){ o.src='ticket'; S.ops.push(o); }
         _gf=false;
       });
       if(mbr && typeof ensureMbr==='function'){ try{ ensureMbr(mbr, _pd); }catch(_){} }
@@ -46223,7 +46325,7 @@ function ocrConfirmTicket(){
     var _first=true;
     _parts.forEach(function(p){
       var o=normalizeOp({ date:date, label:store.slice(0,80), amount:p.amt, cat:p.cat, member:mbr, receipt:(_first?receipt:null), cur:S.cur }, 'dep');
-      if(o){ S.ops.push(o); }
+      if(o){ o.src='ticket'; S.ops.push(o); }
       _first=false;
     });
     if(mbr && typeof ensureMbr==='function'){ try{ ensureMbr(mbr, _pd); }catch(_){} }
@@ -46235,6 +46337,7 @@ function ocrConfirmTicket(){
   }
   var op = normalizeOp({ date:date, label:store.slice(0,80), amount:total, cat:cat, member:mbr, receipt:receipt, cur:S.cur }, 'dep');
   if(op){
+    op.src='ticket';
     S.ops.push(op);
     if(mbr && typeof ensureMbr==='function'){ try{ ensureMbr(mbr, op.pd); }catch(_){} }
     try{ save(); refreshAll(); }catch(_){}
