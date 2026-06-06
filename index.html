@@ -11968,8 +11968,8 @@ body.is-lowend .modal {
 <!-- FIX v140 — PDF.js et Tesseract restent en CDN (lourds : ~2 MB combinés)
      mais avec fallback gracieux si offline. Le SW les précache, donc une fois
      chargées une fois avec Internet, elles fonctionnent ensuite hors ligne. -->
-<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v232] PDF.js indisponible (offline)')"></script>
-<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v232] Tesseract.js indisponible (offline)')"></script>
+<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v234] PDF.js indisponible (offline)')"></script>
+<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v234] Tesseract.js indisponible (offline)')"></script>
 
 <style id="v149-settings-css">
 /* ────────────────────────────────────────────────────────────────
@@ -13496,7 +13496,7 @@ body.amounts-hidden .ch-wrap2::after{
       // The version string is also embedded in the HTML below for detection
       // FIX v146 — version unique de l'app, lue par le SW pour le nom du cache.
       // Doit toujours rester égale à META.version (~ ligne 9023).
-      var APP_VERSION = 'v232';
+      var APP_VERSION = 'v234';
       var swCode = ''
         + 'const CACHE = "fbpro-' + APP_VERSION + '";'
         + 'const CACHE_LIST = ["fbpro-v1","fbpro-v2","fbpro-v3","fbpro-' + APP_VERSION + '"];'
@@ -13854,7 +13854,7 @@ body.amounts-hidden .ch-wrap2::after{
     <div class="tb-mob-brand" id="tbMobBrand">
       <svg width="28" height="28" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="border-radius:6px;flex-shrink:0"><defs><linearGradient id="tb28_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#d97706"/><stop offset="1" stop-color="#b45309"/></linearGradient><linearGradient id="tb28_ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a16207"/><stop offset="1" stop-color="#713f12"/></linearGradient><linearGradient id="tb28_li" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#a16207"/></linearGradient></defs><rect width="180" height="180" rx="40" fill="url(#tb28_bg)"/><rect x="42" y="78" width="96" height="62" rx="5" fill="url(#tb28_ch)"/><rect x="38" y="62" width="104" height="22" rx="6" fill="url(#tb28_li)"/><rect x="38" y="62" width="104" height="4" fill="#fef3c7" opacity="0.4"/><circle cx="90" cy="80" r="6" fill="#713f12"/><rect x="86" y="78" width="8" height="3" fill="#fde68a"/><text x="90" y="124" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fef3c7">€</text></svg>
       <div>
-        <div class="tb-app-name">MagotBudget <span style="font-size:10px;font-weight:600;color:#94a3b8;background:#f1f5f9;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle">v232</span></div>
+        <div class="tb-app-name">MagotBudget <span style="font-size:10px;font-weight:600;color:#94a3b8;background:#f1f5f9;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle">v234</span></div>
         <div class="tb-app-sub" id="tbPageSub">Vue d'ensemble du mois</div>
       </div>
     </div>
@@ -13915,7 +13915,7 @@ body.amounts-hidden .ch-wrap2::after{
       <div id="mhHeroProjected" style="display:none;margin-top:6px;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.8);font-weight:600">
         <span id="mhHeroUpcoming"></span>
         <span style="opacity:.55;margin:0 7px">→</span>
-        <span style="opacity:.92">Solde projeté <strong id="mhHeroProjBal" style="font-weight:800;color:#fff"></strong></span>
+        <span style="opacity:.92"><span data-i18n="mb.proj.projected">Solde projeté</span> <strong id="mhHeroProjBal" style="font-weight:800;color:#fff"></strong></span>
       </div>
     </div>
     <div class="mh-hero-actions">
@@ -15672,7 +15672,7 @@ body.amounts-hidden .ch-wrap2::after{
       </div>
 
       <div class="pm-stack">
-        <div class="pm-grp-cap" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:2px 4px 5px">Sauvegarder · créer un fichier</div>
+        <div class="pm-grp-cap" data-i18n="mb.bk.cap.save" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:2px 4px 5px">Sauvegarder · créer un fichier</div>
         <button class="pm-preview-row" type="button" onclick="exportZIP()">
           <span class="pm-pr-ico"><svg viewBox="0 0 24 24"><path d="M21 8v13H3V8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span>
           <span class="pm-pr-text">
@@ -15690,7 +15690,7 @@ body.amounts-hidden .ch-wrap2::after{
           <span class="pm-pr-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
         </button>
 
-        <div class="pm-grp-cap" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:14px 4px 5px">Importer · charger un fichier</div>
+        <div class="pm-grp-cap" data-i18n="mb.bk.cap.import" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:14px 4px 5px">Importer · charger un fichier</div>
         <button class="pm-preview-row" type="button" onclick="triggerImport()">
           <span class="pm-pr-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
           <span class="pm-pr-text">
@@ -15708,7 +15708,7 @@ body.amounts-hidden .ch-wrap2::after{
           <span class="pm-pr-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
         </button>
 
-        <div class="pm-grp-cap" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:14px 4px 5px">Partage</div>
+        <div class="pm-grp-cap" data-i18n="mb.bk.cap.share" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:14px 4px 5px">Partage</div>
         <button class="pm-preview-row" type="button" onclick="generateTransferQR()">
           <span class="pm-pr-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="14" y1="14" x2="21" y2="14"/><line x1="17" y1="17" x2="17" y2="21"/><line x1="21" y1="17" x2="21" y2="21"/></svg></span>
           <span class="pm-pr-text">
@@ -15718,7 +15718,7 @@ body.amounts-hidden .ch-wrap2::after{
           <span class="pm-pr-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
         </button>
 
-        <div class="pm-grp-cap" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:14px 4px 5px">Entretien</div>
+        <div class="pm-grp-cap" data-i18n="mb.bk.cap.maint" style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#94a3b8;padding:14px 4px 5px">Entretien</div>
         <button class="pm-preview-row" type="button" onclick="refreshAll();showToast&amp;&amp;showToast('toast.balance_recomputed')">
           <span class="pm-pr-ico"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
           <span class="pm-pr-text">
@@ -16393,21 +16393,21 @@ body.amounts-hidden .ch-wrap2::after{
 <div class="mb" id="impEditModal">
   <div class="modal">
     <div class="mh">
-      <h2>Référence du relevé</h2>
+      <h2 data-i18n="mb.imp.edit.title">Référence du relevé</h2>
       <button class="mclose" onclick="closeM('impEditModal')" aria-label="Fermer">×</button>
     </div>
     <div class="mc">
       <input type="hidden" id="impId"/>
       <div class="form2">
-        <div class="fg full"><label>Banque</label><input type="text" id="impBank" placeholder="ex. Crédit Agricole"/></div>
-        <div class="fg"><label>N° de relevé</label><input type="text" id="impNo" inputmode="numeric" placeholder="ex. 003"/></div>
-        <div class="fg"><label>Compte (4 chiffres)</label><input type="text" id="impAcct" maxlength="4" inputmode="numeric" placeholder="ex. 1132"/></div>
-        <div class="fg full"><label>Période</label><input type="month" id="impPeriod"/></div>
+        <div class="fg full"><label data-i18n="mb.imp.field.bank">Banque</label><input type="text" id="impBank" placeholder="ex. Crédit Agricole"/></div>
+        <div class="fg"><label data-i18n="mb.imp.field.no">N° de relevé</label><input type="text" id="impNo" inputmode="numeric" placeholder="ex. 003"/></div>
+        <div class="fg"><label data-i18n="mb.imp.field.acct">Compte (4 chiffres)</label><input type="text" id="impAcct" maxlength="4" inputmode="numeric" placeholder="ex. 1132"/></div>
+        <div class="fg full"><label data-i18n="mb.imp.field.period">Période</label><input type="month" id="impPeriod"/></div>
       </div>
     </div>
     <div class="mf">
-      <button class="btn btn-ghost" onclick="closeM('impEditModal')">Annuler</button>
-      <button class="btn btn-teal" onclick="saveImpRef()">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="closeM('impEditModal')" data-i18n="modal.common.cancel">Annuler</button>
+      <button class="btn btn-teal" onclick="saveImpRef()" data-i18n="modal.common.save">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -16437,7 +16437,7 @@ body.amounts-hidden .ch-wrap2::after{
         <div class="fg"><label data-i18n="modal.field.currency">Devise</label><select id="eCur"></select></div>
         <div class="fg"><label data-i18n="modal.field.date">Date</label><input type="date" id="eDt"/></div>
         <div class="fg full"><label data-i18n="modal.field.description">Description</label><input type="text" id="eDsc"/></div>
-        <div class="fg full" id="eReceiptRow" style="display:none"><button type="button" class="btn btn-ghost" style="width:100%" onclick="viewReceipt(document.getElementById('eId').value)">📎 Voir le justificatif</button></div>
+        <div class="fg full" id="eReceiptRow" style="display:none"><button type="button" class="btn btn-ghost" style="width:100%" onclick="viewReceipt(document.getElementById('eId').value)">📎 <span data-i18n="mb.receipt.view">Voir le justificatif</span></button></div>
         <div class="fg full" id="eImpRow" style="display:none"><div style="font-size:12px;color:#64748b;background:#f1f5f9;border-radius:8px;padding:8px 10px;line-height:1.4">📑 <span id="eImpTxt"></span></div></div>
       </div>
     </div>
@@ -25346,10 +25346,10 @@ window.editImpRef=editImpRef; window.saveImpRef=saveImpRef;
 
 function histToggleHistGroup(){ window._histGroupBySource=!window._histGroupBySource; try{ renderHistory(); }catch(_){} }
 function _histGrpHeader(key, ops){
-  if(key==='T') return {ico:'🧾', label:'Tickets scannés'};
-  if(key==='M') return {ico:'✍️', label:'Saisies manuelles'};
+  if(key==='T') return {ico:'🧾', label:trUI('mb.grp.tickets')};
+  if(key==='M') return {ico:'✍️', label:trUI('mb.grp.manual')};
   var imp=(Array.isArray(S.imports)?S.imports.find(function(x){return x.id===key.slice(2);}):null);
-  return {ico:'🏦', label: imp?bkImpLabel(imp):'Relevé importé'};
+  return {ico:'🏦', label: imp?bkImpLabel(imp):trUI('mb.imp.statement')};
 }
 function histToggleGroup(el){
   if(!el) return; var k=el.getAttribute('data-grp'); if(!k) return;
@@ -25470,7 +25470,7 @@ function renderHistory(){
     }
     html+='</div></td></tr>';
     // [v229] Bouton bascule : par date ⇄ par relevé
-    html+='<tr><td colspan="6" style="padding:4px 2px 2px;border:0"><button type="button" class="btn btn-ghost" style="font-size:12px;padding:5px 12px;border-radius:999px" onclick="histToggleHistGroup()">'+(window._histGroupBySource?'📅 Revenir par date':'📑 Grouper par relevé')+'</button></td></tr>';
+    html+='<tr><td colspan="6" style="padding:4px 2px 2px;border:0"><button type="button" class="btn btn-ghost" style="font-size:12px;padding:5px 12px;border-radius:999px" onclick="histToggleHistGroup()">'+(window._histGroupBySource?trUI('mb.hist.bydate'):trUI('mb.hist.group'))+'</button></td></tr>';
     var groups={}; var order=[];
     // Séparer futur / réalisé puis ordonner :
     //  • À venir d'abord, de la date la plus proche à la plus lointaine (croissant)
@@ -29901,18 +29901,25 @@ function bkExtractStmtRef(text, rows){
 }
 function _bkPeriodFr(p){
   if(!/^\d{4}-\d{2}$/.test(p||'')) return '';
-  var mo=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  var a=p.split('-'); return (mo[parseInt(a[1],10)-1]||'')+' '+a[0];
+  try{
+    var a=p.split('-'); var d=new Date(parseInt(a[0],10), parseInt(a[1],10)-1, 1);
+    var loc=(typeof appDateLocale==='function')?appDateLocale():'fr-FR';
+    var s=d.toLocaleDateString(loc,{month:'long',year:'numeric'});
+    return s.charAt(0).toUpperCase()+s.slice(1);
+  }catch(_){
+    var mo=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    var b=p.split('-'); return (mo[parseInt(b[1],10)-1]||'')+' '+b[0];
+  }
 }
 function bkImpLabel(imp){
   if(!imp) return '';
   var parts=[];
   if(imp.bank) parts.push(imp.bank);
-  if(imp.no) parts.push('Relevé n°'+imp.no);
+  if(imp.no) parts.push(trUI('mb.imp.no')+' '+imp.no);
   var per=_bkPeriodFr(imp.period); if(per) parts.push(per);
-  if(imp.acct) parts.push('compte ••• '+imp.acct);
-  var s=parts.join(' · ') || 'Relevé importé';
-  if(imp.at){ try{ s+=' — importé le '+new Date(imp.at).toLocaleDateString('fr-FR'); }catch(_){} }
+  if(imp.acct) parts.push(trUI('mb.imp.acct')+' ••• '+imp.acct);
+  var s=parts.join(' · ') || trUI('mb.imp.statement');
+  if(imp.at){ try{ var loc=(typeof appDateLocale==='function')?appDateLocale():'fr-FR'; s+=' — '+trUI('mb.imp.importedOn')+' '+new Date(imp.at).toLocaleDateString(loc); }catch(_){} }
   return s;
 }
 window.bkExtractStmtRef=bkExtractStmtRef; window.bkImpLabel=bkImpLabel;
@@ -31856,7 +31863,7 @@ function buildYearReportSlides(report){
   // Slide 6: outro
   html += '<div class="yr-slide yr-slide-outro" style="transform:translateX(500%)">';
   html += '<div class="yr-slide-brand-icon">';
-  html += '<svg viewBox="0 0 64 64" width="64" height="64"><defs><linearGradient id="yrLg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#115e59"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#yrLg)"/><path d="M32 14 L14 28 V46 a3 3 0 0 0 3 3 H26 V36 a2 2 0 0 1 2 -2 H36 a2 2 0 0 1 2 2 V49 H47 a3 3 0 0 0 3 -3 V28 Z" fill="white" opacity="0.95"/></svg>';
+  html += '<svg viewBox="0 0 180 180" width="72" height="72"><defs><linearGradient id="yrBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#d97706"/><stop offset="1" stop-color="#b45309"/></linearGradient><linearGradient id="yrChest" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a16207"/><stop offset="1" stop-color="#713f12"/></linearGradient><linearGradient id="yrLid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#a16207"/></linearGradient></defs><rect width="180" height="180" rx="40" fill="url(#yrBg)"/><rect x="42" y="78" width="96" height="62" rx="5" fill="url(#yrChest)"/><rect x="38" y="62" width="104" height="22" rx="6" fill="url(#yrLid)"/><rect x="38" y="62" width="104" height="4" fill="#fef3c7" opacity="0.4"/><circle cx="90" cy="80" r="6" fill="#713f12"/><rect x="86" y="78" width="8" height="3" fill="#fde68a"/><text x="90" y="124" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fef3c7">€</text></svg>';
   html += '</div>';
   html += '<div class="yr-slide-tagline">' + (trUI('yearreport.outro.tagline') || 'Continuez l\'aventure en {next}').replace('{next}', year + 1) + '</div>';
   html += '<div class="yr-slide-brand">MagotBudget</div>';
@@ -42067,6 +42074,53 @@ var I18N_UI = {
   }
 };
 
+// [v234] Clés i18n pour les textes ajoutés récemment (étaient en français en dur).
+Object.assign(I18N_UI.fr, {
+  'mb.bk.cap.save':'Sauvegarder · créer un fichier','mb.bk.cap.import':'Importer · charger un fichier','mb.bk.cap.share':'Partage','mb.bk.cap.maint':'Entretien',
+  'mb.proj.upcoming':'À venir','mb.proj.projected':'Solde projeté',
+  'mb.grp.tickets':'Tickets scannés','mb.grp.manual':'Saisies manuelles',
+  'mb.imp.statement':'Relevé importé','mb.imp.no':'Relevé n°','mb.imp.acct':'compte','mb.imp.importedOn':'importé le',
+  'mb.receipt.view':'Voir le justificatif','mb.imp.edit.title':'Référence du relevé',
+  'mb.imp.field.bank':'Banque','mb.imp.field.no':'N° de relevé','mb.imp.field.acct':'Compte (4 chiffres)','mb.imp.field.period':'Période'
+});
+Object.assign(I18N_UI.en, {
+  'mb.bk.cap.save':'Back up · create a file','mb.bk.cap.import':'Import · load a file','mb.bk.cap.share':'Sharing','mb.bk.cap.maint':'Maintenance',
+  'mb.proj.upcoming':'Upcoming','mb.proj.projected':'Projected balance',
+  'mb.grp.tickets':'Scanned receipts','mb.grp.manual':'Manual entries',
+  'mb.imp.statement':'Imported statement','mb.imp.no':'Statement no.','mb.imp.acct':'account','mb.imp.importedOn':'imported on',
+  'mb.receipt.view':'View receipt','mb.imp.edit.title':'Statement reference',
+  'mb.imp.field.bank':'Bank','mb.imp.field.no':'Statement no.','mb.imp.field.acct':'Account (4 digits)','mb.imp.field.period':'Period'
+});
+Object.assign(I18N_UI.es, {
+  'mb.bk.cap.save':'Copia de seguridad · crear un archivo','mb.bk.cap.import':'Importar · cargar un archivo','mb.bk.cap.share':'Compartir','mb.bk.cap.maint':'Mantenimiento',
+  'mb.proj.upcoming':'Próximo','mb.proj.projected':'Saldo previsto',
+  'mb.grp.tickets':'Tickets escaneados','mb.grp.manual':'Entradas manuales',
+  'mb.imp.statement':'Extracto importado','mb.imp.no':'Extracto n.º','mb.imp.acct':'cuenta','mb.imp.importedOn':'importado el',
+  'mb.receipt.view':'Ver justificante','mb.imp.edit.title':'Referencia del extracto',
+  'mb.imp.field.bank':'Banco','mb.imp.field.no':'N.º de extracto','mb.imp.field.acct':'Cuenta (4 dígitos)','mb.imp.field.period':'Período'
+});
+Object.assign(I18N_UI.it, {
+  'mb.bk.cap.save':'Backup · crea un file','mb.bk.cap.import':'Importa · carica un file','mb.bk.cap.share':'Condivisione','mb.bk.cap.maint':'Manutenzione',
+  'mb.proj.upcoming':'In arrivo','mb.proj.projected':'Saldo previsto',
+  'mb.grp.tickets':'Scontrini scansionati','mb.grp.manual':'Voci manuali',
+  'mb.imp.statement':'Estratto importato','mb.imp.no':'Estratto n.','mb.imp.acct':'conto','mb.imp.importedOn':'importato il',
+  'mb.receipt.view':'Vedi giustificativo','mb.imp.edit.title':'Riferimento estratto',
+  'mb.imp.field.bank':'Banca','mb.imp.field.no':'N. estratto','mb.imp.field.acct':'Conto (4 cifre)','mb.imp.field.period':'Periodo'
+});
+Object.assign(I18N_UI.de, {
+  'mb.bk.cap.save':'Sichern · Datei erstellen','mb.bk.cap.import':'Importieren · Datei laden','mb.bk.cap.share':'Teilen','mb.bk.cap.maint':'Wartung',
+  'mb.proj.upcoming':'Anstehend','mb.proj.projected':'Voraussichtlicher Saldo',
+  'mb.grp.tickets':'Gescannte Belege','mb.grp.manual':'Manuelle Einträge',
+  'mb.imp.statement':'Importierter Auszug','mb.imp.no':'Auszug Nr.','mb.imp.acct':'Konto','mb.imp.importedOn':'importiert am',
+  'mb.receipt.view':'Beleg ansehen','mb.imp.edit.title':'Auszug-Referenz',
+  'mb.imp.field.bank':'Bank','mb.imp.field.no':'Auszugsnummer','mb.imp.field.acct':'Konto (4 Ziffern)','mb.imp.field.period':'Zeitraum'
+});
+Object.assign(I18N_UI.fr,{'mb.hist.group':'📑 Grouper par relevé','mb.hist.bydate':'📅 Revenir par date'});
+Object.assign(I18N_UI.en,{'mb.hist.group':'📑 Group by statement','mb.hist.bydate':'📅 Back to date view'});
+Object.assign(I18N_UI.es,{'mb.hist.group':'📑 Agrupar por extracto','mb.hist.bydate':'📅 Volver por fecha'});
+Object.assign(I18N_UI.it,{'mb.hist.group':'📑 Raggruppa per estratto','mb.hist.bydate':'📅 Torna per data'});
+Object.assign(I18N_UI.de,{'mb.hist.group':'📑 Nach Auszug gruppieren','mb.hist.bydate':'📅 Zurück zur Datumsansicht'});
+
 var PAGE_NAMES = {
   fr: {
     home:'Accueil',
@@ -44927,12 +44981,12 @@ function syncMobHome(dep, rev, ep, solde, finalSolde, health){
           var _symP=(typeof getCurSym==='function')?getCurSym(_curP):'€';
           var _upEl=document.getElementById('mhHeroUpcoming'), _pbEl=document.getElementById('mhHeroProjBal');
           if(typeof S!=='undefined'&&S&&S.hideAmounts){
-            if(_upEl)_upEl.textContent='À venir •••';
+            if(_upEl)_upEl.textContent=trUI('mb.proj.upcoming')+' •••';
             if(_pbEl)_pbEl.textContent='•••\u202f'+_symP;
           } else {
             var _sg=_upDelta>0?'+':(_upDelta<0?'\u2212':'');
             var _abs=function(v){ return Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+_symP; };
-            if(_upEl)_upEl.textContent='À venir '+_sg+_abs(_upDelta);
+            if(_upEl)_upEl.textContent=trUI('mb.proj.upcoming')+' '+_sg+_abs(_upDelta);
             if(_pbEl)_pbEl.textContent=(_proj<0?'\u2212':'')+_abs(_proj);
           }
           _projEl.style.display='';
