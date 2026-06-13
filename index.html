@@ -11972,8 +11972,8 @@ body.is-lowend .modal {
 <!-- FIX v140 — PDF.js et Tesseract restent en CDN (lourds : ~2 MB combinés)
      mais avec fallback gracieux si offline. Le SW les précache, donc une fois
      chargées une fois avec Internet, elles fonctionnent ensuite hors ligne. -->
-<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v272] PDF.js indisponible (offline)')"></script>
-<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v272] Tesseract.js indisponible (offline)')"></script>
+<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v274] PDF.js indisponible (offline)')"></script>
+<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v274] Tesseract.js indisponible (offline)')"></script>
 
 <style id="v149-settings-css">
 /* ────────────────────────────────────────────────────────────────
@@ -13496,7 +13496,7 @@ body.amounts-hidden .ch-wrap2::after{
       // The version string is also embedded in the HTML below for detection
       // FIX v146 — version unique de l'app, lue par le SW pour le nom du cache.
       // Doit toujours rester égale à META.version (~ ligne 9023).
-      var APP_VERSION = 'v272';
+      var APP_VERSION = 'v274';
       var swCode = ''
         + 'const CACHE = "fbpro-' + APP_VERSION + '";'
         + 'const CACHE_LIST = ["fbpro-v1","fbpro-v2","fbpro-v3","fbpro-' + APP_VERSION + '"];'
@@ -13863,7 +13863,7 @@ body.amounts-hidden .ch-wrap2::after{
     <div class="tb-mob-brand" id="tbMobBrand">
       <svg width="28" height="28" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="border-radius:6px;flex-shrink:0"><defs><linearGradient id="tb28_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#d97706"/><stop offset="1" stop-color="#b45309"/></linearGradient><linearGradient id="tb28_ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a16207"/><stop offset="1" stop-color="#713f12"/></linearGradient><linearGradient id="tb28_li" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#a16207"/></linearGradient></defs><rect width="180" height="180" rx="40" fill="url(#tb28_bg)"/><rect x="42" y="78" width="96" height="62" rx="5" fill="url(#tb28_ch)"/><rect x="38" y="62" width="104" height="22" rx="6" fill="url(#tb28_li)"/><rect x="38" y="62" width="104" height="4" fill="#fef3c7" opacity="0.4"/><circle cx="90" cy="80" r="6" fill="#713f12"/><rect x="86" y="78" width="8" height="3" fill="#fde68a"/><text x="90" y="124" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fef3c7">€</text></svg>
       <div>
-        <div class="tb-app-name">MagotBudget<!-- build v272 --></div>
+        <div class="tb-app-name">MagotBudget<!-- build v274 --></div>
         <div class="tb-app-sub" id="tbPageSub" data-i18n="hd.month_overview">Vue d'ensemble du mois</div>
       </div>
     </div>
@@ -16173,7 +16173,7 @@ body.amounts-hidden .ch-wrap2::after{
     <!-- Tech specs -->
     <div class="set-sub-section">
       <h3 class="t-h4" style="margin-bottom:12px" data-i18n="set.about.tech.title">Caractéristiques techniques</h3>
-      <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.version">Version</span><span class="about-spec-val" id="about-app-version">1.0 (build 272)</span></div>
+      <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.version">Version</span><span class="about-spec-val" id="about-app-version">1.0 (build 274)</span></div>
       <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.encryption">Chiffrement</span><span class="about-spec-val">AES-256-GCM</span></div>
       <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.storage">Stockage</span><span class="about-spec-val">LocalStorage + IndexedDB</span></div>
     </div>
@@ -24194,6 +24194,61 @@ function drawDonutChart(){
 }
 
 // ── v19.8: premium annual evolution chart ────────────────────────────
+function _yrTxt(k){
+  var L={
+    fr:{show_summary:"Résumé",back_chart:"Graphique",title:"Résumé de l'année",exp:"Mois le plus dépensier",eco:"Mois le plus économe",save_m:"Meilleur mois d'épargne",bilan:"Bilan de l'année",w_rev:"reçus",w_dep:"dépensés",w_ep:"épargnés",rate:"Taux d'épargne moyen",trend_up:"Tes dépenses sont en hausse de {p}\u00a0%",trend_down:"Tes dépenses sont en baisse de {p}\u00a0%",trend_flat:"Tes dépenses sont stables",vs_less:"{p}\u00a0% de moins qu'en {y}",vs_more:"{p}\u00a0% de plus qu'en {y}",verdict_good:"Très bonne dynamique d'épargne !",verdict_ok:"Bonne dynamique d'épargne.",verdict_low:"Épargne faible cette année — tu peux viser un peu plus.",verdict_neg:"Attention : tu dépenses plus que tes revenus.",none:"Pas encore assez de données pour un résumé."},
+    en:{show_summary:"Summary",back_chart:"Chart",title:"Year in review",exp:"Biggest spending month",eco:"Leanest month",save_m:"Best savings month",bilan:"Year totals",w_rev:"received",w_dep:"spent",w_ep:"saved",rate:"Average savings rate",trend_up:"Your spending is up {p}%",trend_down:"Your spending is down {p}%",trend_flat:"Your spending is steady",vs_less:"{p}% less than {y}",vs_more:"{p}% more than {y}",verdict_good:"Great savings momentum!",verdict_ok:"Good savings momentum.",verdict_low:"Low savings this year — you could aim higher.",verdict_neg:"Heads up: you're spending more than you earn.",none:"Not enough data yet for a summary."},
+    es:{show_summary:"Resumen",back_chart:"Gráfico",title:"Resumen del año",exp:"Mes de mayor gasto",eco:"Mes más ahorrador",save_m:"Mejor mes de ahorro",bilan:"Balance del año",w_rev:"recibidos",w_dep:"gastados",w_ep:"ahorrados",rate:"Tasa de ahorro media",trend_up:"Tus gastos suben un {p}\u00a0%",trend_down:"Tus gastos bajan un {p}\u00a0%",trend_flat:"Tus gastos son estables",vs_less:"{p}\u00a0% menos que en {y}",vs_more:"{p}\u00a0% más que en {y}",verdict_good:"¡Muy buen ritmo de ahorro!",verdict_ok:"Buen ritmo de ahorro.",verdict_low:"Poco ahorro este año: puedes apuntar más alto.",verdict_neg:"Atención: gastas más de lo que ingresas.",none:"Aún no hay suficientes datos para un resumen."},
+    it:{show_summary:"Riepilogo",back_chart:"Grafico",title:"Riepilogo dell'anno",exp:"Mese con più spese",eco:"Mese più parsimonioso",save_m:"Miglior mese di risparmio",bilan:"Bilancio dell'anno",w_rev:"ricevuti",w_dep:"spesi",w_ep:"risparmiati",rate:"Tasso di risparmio medio",trend_up:"Le tue spese aumentano del {p}\u00a0%",trend_down:"Le tue spese diminuiscono del {p}\u00a0%",trend_flat:"Le tue spese sono stabili",vs_less:"{p}\u00a0% in meno rispetto al {y}",vs_more:"{p}\u00a0% in più rispetto al {y}",verdict_good:"Ottimo ritmo di risparmio!",verdict_ok:"Buon ritmo di risparmio.",verdict_low:"Pochi risparmi quest'anno: puoi puntare più in alto.",verdict_neg:"Attenzione: spendi più di quanto guadagni.",none:"Dati ancora insufficienti per un riepilogo."},
+    de:{show_summary:"Übersicht",back_chart:"Diagramm",title:"Jahresrückblick",exp:"Ausgabenstärkster Monat",eco:"Sparsamster Monat",save_m:"Bester Sparmonat",bilan:"Jahresbilanz",w_rev:"erhalten",w_dep:"ausgegeben",w_ep:"gespart",rate:"Durchschnittliche Sparquote",trend_up:"Deine Ausgaben steigen um {p}\u00a0%",trend_down:"Deine Ausgaben sinken um {p}\u00a0%",trend_flat:"Deine Ausgaben sind stabil",vs_less:"{p}\u00a0% weniger als {y}",vs_more:"{p}\u00a0% mehr als {y}",verdict_good:"Starke Spardynamik!",verdict_ok:"Gute Spardynamik.",verdict_low:"Wenig gespart dieses Jahr — du kannst mehr anpeilen.",verdict_neg:"Achtung: Du gibst mehr aus, als du einnimmst.",none:"Noch nicht genug Daten für eine Zusammenfassung."}
+  };
+  var lng=(typeof CURRENT_LANG!=='undefined'&&CURRENT_LANG)?CURRENT_LANG:'fr';
+  var t=L[lng]||L.fr; return (t[k]!=null?t[k]:(L.fr[k]!=null?L.fr[k]:k));
+}
+function _yrSummaryHTML(real,months,lastMonth,year,isCur,mbr){
+  function sum(a,n){var s=0;for(var i=0;i<n;i++)s+=(a[i]||0);return s;}
+  var n=lastMonth;
+  var iExp=-1,iEco=-1,iSav=-1,vExp=-1,vEco=Infinity,vSav=-1;
+  for(var i=0;i<n;i++){var d=real.dep[i]||0,e=real.ep[i]||0;
+    if(d>vExp){vExp=d;iExp=i;} if(d>0&&d<vEco){vEco=d;iEco=i;} if(e>vSav){vSav=e;iSav=i;}}
+  var totDep=sum(real.dep,n),totRev=sum(real.rev,n),totEp=sum(real.ep,n);
+  if(!(totDep>0||totRev>0||totEp>0)||n<1){
+    return '<div class="yr-summary" style="display:none;padding:14px 6px;opacity:.75;font-size:13px">'+esc(_yrTxt('none'))+'</div>';}
+  var rate=totRev>0?Math.round(totEp/totRev*100):null;
+  var trendTxt='';
+  if(n>=2){var a1=0,c1=0,a2=0,c2=0,hf=Math.ceil(n/2);
+    for(var j=0;j<n;j++){var dd=real.dep[j]||0; if(j<hf){a1+=dd;c1++;}else{a2+=dd;c2++;}}
+    var m1=c1?a1/c1:0,m2=c2?a2/c2:0;
+    if(m1>0){var pc=Math.round((m2-m1)/m1*100);
+      if(pc>=5)trendTxt=_yrTxt('trend_up').replace('{p}',pc);
+      else if(pc<=-5)trendTxt=_yrTxt('trend_down').replace('{p}',Math.abs(pc));
+      else trendTxt=_yrTxt('trend_flat');}}
+  var yoyTxt='';
+  try{var lyDep=0;
+    for(var mm=1;mm<=n;mm++){var pd=(year-1)+'-'+String(mm).padStart(2,'0');var kk=computePeriodMetricsShallow(pd,mbr||'');lyDep+=(kk&&kk.dep)?kk.dep:0;}
+    if(lyDep>0){var yp=Math.round((totDep-lyDep)/lyDep*100);
+      if(yp<=-1)yoyTxt=_yrTxt('vs_less').replace('{p}',Math.abs(yp)).replace('{y}',(year-1));
+      else if(yp>=1)yoyTxt=_yrTxt('vs_more').replace('{p}',yp).replace('{y}',(year-1));}}catch(_){}
+  var verdict,vbg;
+  if(totDep>totRev){verdict=_yrTxt('verdict_neg');vbg='rgba(180,86,74,.14)';}
+  else if(rate!=null&&rate>=20){verdict=_yrTxt('verdict_good');vbg='rgba(63,139,125,.14)';}
+  else if(rate!=null&&rate>=10){verdict=_yrTxt('verdict_ok');vbg='rgba(63,139,125,.10)';}
+  else{verdict=_yrTxt('verdict_low');vbg='rgba(176,134,65,.12)';}
+  var rc='display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:7px 2px;border-bottom:1px solid rgba(128,128,128,.15);font-size:13px';
+  function row(l,v){return '<div style="'+rc+'"><span style="opacity:.85">'+l+'</span><b style="font-weight:700;white-space:nowrap">'+v+'</b></div>';}
+  var h='<div class="yr-summary" style="display:none;padding:8px 6px 4px">';
+  h+='<div style="font-weight:700;font-size:15px;margin:2px 2px 10px">'+esc(_yrTxt('title'))+' '+year+'</div>';
+  if(iExp>=0)h+=row('💸 '+esc(_yrTxt('exp')),esc(months[iExp])+' · '+fC(vExp));
+  if(iEco>=0)h+=row('🌱 '+esc(_yrTxt('eco')),esc(months[iEco])+' · '+fC(vEco));
+  if(iSav>=0&&vSav>0)h+=row('🏆 '+esc(_yrTxt('save_m')),esc(months[iSav])+' · '+fC(vSav));
+  h+='<div style="'+rc+';border-bottom:none;padding-bottom:2px"><span style="opacity:.85">📊 '+esc(_yrTxt('bilan'))+'</span><b></b></div>';
+  h+='<div style="font-size:12.5px;opacity:.9;padding:0 2px 9px;border-bottom:1px solid rgba(128,128,128,.15)">'+fC(totRev)+' '+esc(_yrTxt('w_rev'))+' · '+fC(totDep)+' '+esc(_yrTxt('w_dep'))+' · '+fC(totEp)+' '+esc(_yrTxt('w_ep'))+'</div>';
+  if(rate!=null)h+=row('📈 '+esc(_yrTxt('rate')),rate+'\u00a0%');
+  if(trendTxt||yoyTxt)h+='<div style="font-size:12.5px;opacity:.82;margin-top:8px">'+esc(trendTxt)+((trendTxt&&yoyTxt)?' · ':'')+esc(yoyTxt)+'</div>';
+  h+='<div style="margin-top:10px;font-size:13px;font-weight:600;padding:9px 11px;border-radius:9px;background:'+vbg+'">'+esc(verdict)+'</div>';
+  h+='</div>';
+  return h;
+}
 function drawYearChart(){
   // ─── Collecte (logique conservée) ───────────────────────────────
   const year=getYear();
@@ -24211,14 +24266,26 @@ function drawYearChart(){
     real.ep.push(parseFloat(k.ep.toFixed(2)));
   }
   const idxToday=_lastMonth-1;
-  function proj(arr){
-    if(!_isCur||arr.length>=12) return arr.slice();
-    var r=arr.filter(v=>v!=null&&v!==undefined);
-    var a=r.length?r.reduce((x,y)=>x+y,0)/r.length:0;
-    var o=arr.slice(); for(var m=arr.length;m<12;m++) o.push(parseFloat(a.toFixed(2)));
-    return o;
+  // ── Prévision cohérente ──
+  // Revenus : médiane (un mois exceptionnel, ou un salaire reçu une seule fois,
+  //           ne gonfle plus la projection ; elle reflète ce qui se répète vraiment).
+  // Épargne : plafonnée par ce qui reste réellement disponible (revenus − dépenses).
+  // Solde   : recalculé = revenus − dépenses − épargne (et NON une moyenne indépendante),
+  //           pour que la courbe montre honnêtement où va le compte.
+  function _yrMean(a){ return a.length? a.reduce((x,y)=>x+y,0)/a.length : 0; }
+  function _yrMedian(a){ if(!a.length) return 0; var s=a.slice().sort((x,y)=>x-y); var m=Math.floor(s.length/2); return (s.length%2)? s[m] : (s[m-1]+s[m])/2; }
+  var S;
+  if(!_isCur || real.dep.length>=12){
+    S={dep:real.dep.slice(),ep:real.ep.slice(),rev:real.rev.slice(),sol:real.sol.slice()};
+  } else {
+    var _pDep=parseFloat(_yrMean(real.dep).toFixed(2));
+    var _pRev=parseFloat(_yrMedian(real.rev).toFixed(2));
+    var _avail=Math.max(0,_pRev-_pDep);
+    var _pEp=parseFloat(Math.min(_yrMean(real.ep),_avail).toFixed(2));
+    var _pSol=parseFloat((_pRev-_pDep-_pEp).toFixed(2));
+    var _cp=function(arr,val){ var o=arr.slice(); for(var m=arr.length;m<12;m++) o.push(val); return o; };
+    S={dep:_cp(real.dep,_pDep), ep:_cp(real.ep,_pEp), rev:_cp(real.rev,_pRev), sol:_cp(real.sol,_pSol)};
   }
-  const S={dep:proj(real.dep),ep:proj(real.ep),rev:proj(real.rev),sol:proj(real.sol)};
   try{ _yrUpdateSummary(S.sol[idxToday], months[idxToday]); }catch(_){}
 
   const host=document.getElementById('cYear'); if(!host) return;
@@ -24299,7 +24366,8 @@ function drawYearChart(){
 
   host.innerHTML='<svg class="yr-svg" viewBox="0 0 '+VB.w+' '+VB.h+'" preserveAspectRatio="xMidYMid meet">'
     +defs+proj_g+grid+'<g class="yr-reveal">'+series+'</g>'+now+xl+pts+proj_badge+scrub+'</svg>'
-    +'<div class="yr-tip"></div>';
+    +'<div class="yr-tip"></div>'
+    +_yrSummaryHTML(real,months,_lastMonth,year,_isCur,mbr);
 
   _yrBuildPills();
   _yrApplyStates();
@@ -24371,13 +24439,19 @@ function _yrBuildPills(){
   }
   const cb=document.getElementById('yrCmpBtn');
   if(cb){
-    cb.textContent=trUI('analysis.year.compare')||'Comparer';
+    cb.textContent=_YR.compare?_yrTxt('back_chart'):_yrTxt('show_summary');
     cb.classList.toggle('on',_YR.compare);
     cb.onclick=function(){_YR.compare=!_YR.compare;_yrApplyStates();};
   }
 }
 function _yrApplyStates(){
   const host=document.getElementById('cYear'); if(!host) return;
+  // Bouton « Comparer » → bascule vers le résumé en clair (et masque la courbe)
+  var _sum=host.querySelector('.yr-summary'), _svg=host.querySelector('.yr-svg'), _tip=host.querySelector('.yr-tip');
+  if(_YR.compare){
+    if(_sum)_sum.style.display=''; if(_svg)_svg.style.display='none'; if(_tip)_tip.style.display='none';
+    _yrBuildPills(); return;
+  } else { if(_sum)_sum.style.display='none'; if(_svg)_svg.style.display=''; if(_tip)_tip.style.display=''; }
   host.querySelectorAll('.yr-serie').forEach(g=>{
     const k=g.getAttribute('data-key'); g.classList.remove('s-focus','s-ctx','s-cmp','s-off');
     g.classList.add(!_YR.vis[k]?'s-off':_YR.compare?'s-cmp':(k===_YR.focus?'s-focus':'s-ctx'));
