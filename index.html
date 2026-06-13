@@ -11972,8 +11972,8 @@ body.is-lowend .modal {
 <!-- FIX v140 — PDF.js et Tesseract restent en CDN (lourds : ~2 MB combinés)
      mais avec fallback gracieux si offline. Le SW les précache, donc une fois
      chargées une fois avec Internet, elles fonctionnent ensuite hors ligne. -->
-<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v281] PDF.js indisponible (offline)')"></script>
-<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v281] Tesseract.js indisponible (offline)')"></script>
+<script src="assets/libs/pdfjs/pdf.min.js" onerror="window._v140_pdfFail=true;console.warn('[v282] PDF.js indisponible (offline)')"></script>
+<script src="assets/libs/tesseract/tesseract.min.js" onerror="window._v140_tesseractFail=true;console.warn('[v282] Tesseract.js indisponible (offline)')"></script>
 
 <style id="v149-settings-css">
 /* ────────────────────────────────────────────────────────────────
@@ -13496,7 +13496,7 @@ body.amounts-hidden .ch-wrap2::after{
       // The version string is also embedded in the HTML below for detection
       // FIX v146 — version unique de l'app, lue par le SW pour le nom du cache.
       // Doit toujours rester égale à META.version (~ ligne 9023).
-      var APP_VERSION = 'v281';
+      var APP_VERSION = 'v282';
       var swCode = ''
         + 'const CACHE = "fbpro-' + APP_VERSION + '";'
         + 'const CACHE_LIST = ["fbpro-v1","fbpro-v2","fbpro-v3","fbpro-' + APP_VERSION + '"];'
@@ -13863,7 +13863,7 @@ body.amounts-hidden .ch-wrap2::after{
     <div class="tb-mob-brand" id="tbMobBrand">
       <svg width="28" height="28" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="border-radius:6px;flex-shrink:0"><defs><linearGradient id="tb28_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#d97706"/><stop offset="1" stop-color="#b45309"/></linearGradient><linearGradient id="tb28_ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a16207"/><stop offset="1" stop-color="#713f12"/></linearGradient><linearGradient id="tb28_li" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#a16207"/></linearGradient></defs><rect width="180" height="180" rx="40" fill="url(#tb28_bg)"/><rect x="42" y="78" width="96" height="62" rx="5" fill="url(#tb28_ch)"/><rect x="38" y="62" width="104" height="22" rx="6" fill="url(#tb28_li)"/><rect x="38" y="62" width="104" height="4" fill="#fef3c7" opacity="0.4"/><circle cx="90" cy="80" r="6" fill="#713f12"/><rect x="86" y="78" width="8" height="3" fill="#fde68a"/><text x="90" y="124" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fef3c7">€</text></svg>
       <div>
-        <div class="tb-app-name">MagotBudget<!-- build v281 --></div>
+        <div class="tb-app-name">MagotBudget<!-- build v282 --></div>
         <div class="tb-app-sub" id="tbPageSub" data-i18n="hd.month_overview">Vue d'ensemble du mois</div>
       </div>
     </div>
@@ -16173,7 +16173,7 @@ body.amounts-hidden .ch-wrap2::after{
     <!-- Tech specs -->
     <div class="set-sub-section">
       <h3 class="t-h4" style="margin-bottom:12px" data-i18n="set.about.tech.title">Caractéristiques techniques</h3>
-      <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.version">Version</span><span class="about-spec-val" id="about-app-version">1.0 (build 281)</span></div>
+      <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.version">Version</span><span class="about-spec-val" id="about-app-version">1.0 (build 282)</span></div>
       <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.encryption">Chiffrement</span><span class="about-spec-val">AES-256-GCM</span></div>
       <div class="about-spec-row"><span class="about-spec-lbl" data-i18n="set.about.tech.storage">Stockage</span><span class="about-spec-val">LocalStorage + IndexedDB</span></div>
       <button type="button" onclick="storageDiag()" style="margin-top:12px;width:100%;padding:11px;border-radius:8px;border:1px solid var(--border,#ccc);background:transparent;font-size:13px;cursor:pointer">🔍 Diagnostic stockage</button>
@@ -22301,6 +22301,7 @@ async function save(){
   delete snapshot.pin;
   delete snapshot.pinRec;
   delete snapshot._savedAt; delete snapshot.v; // métadonnées du bloc, ne doivent pas polluer l'état persisté
+  try{ if(typeof S!=='undefined' && S){ delete S._savedAt; delete S.v; } }catch(_){}
   S.pin=null; S.pinRec=null;
   const safe=await sanitizeStateForPersistence(snapshot);
   if(safe.pinHash) S.pinHash=safe.pinHash;
@@ -22816,7 +22817,7 @@ async function storageDiag(){
         var _safe=(typeof sanitizeStateForPersistence==='function')?await sanitizeStateForPersistence(_snap):_snap;
         L.push('2 sanitize : OK');
         try{
-          var _str=JSON.stringify({v:'plain1',_savedAt:Date.now(),..._safe});
+          var _str=JSON.stringify({v:'plain1',..._safe,_savedAt:Date.now()});
           L.push('3 JSON final : OK ('+(_str.length/1024).toFixed(0)+' Ko)');
           // écritures DIRECTES (sans la couche qui avale les erreurs) + relecture
           try{ localStorage.setItem('fbpro_tiny','x'+Date.now()); var _t=localStorage.getItem('fbpro_tiny'); localStorage.removeItem('fbpro_tiny'); L.push('4a LS petit : '+(_t?'OK':'ÉCHEC silencieux')); }catch(_e4a){ L.push('4a LS petit : '+(_e4a&&_e4a.name)+' → '+(_e4a&&_e4a.message)); }
