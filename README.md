@@ -4,11 +4,7 @@
 
 <br>
 
-Votre budget familial, privé et hors-ligne — dans une seule page web.**
 
-</div>
-
-## 📸 Captures d’écran
 
 <div align="center">
 <table>
