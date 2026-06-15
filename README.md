@@ -1,110 +1,122 @@
-<p align="center">
-  <img src="icon.png" alt="MagotBudget" width="96" height="96"/>
-</p>
+<<div align="center">
 
-<h1 align="center">MagotBudget</h1>
+<img src="./banner.svg" alt="MagotBudget" width="100%">
 
-<p align="center"><strong>Votre budget familial, privé et hors-ligne — dans une seule page web.</strong></p>
+<br>
 
-MagotBudget est une application de gestion de budget *privacy-first* : vos données restent
-**chiffrées sur votre appareil**, l’app fonctionne **hors-ligne** (PWA installable), et lit
-automatiquement vos **tickets de caisse** et **relevés bancaires**.
+[![Version](https://img.shields.io/badge/version-v216-0d9488?style=for-the-badge)](#)
+[![PWA](https://img.shields.io/badge/PWA-installable-14b8a6?style=for-the-badge&logo=pwa&logoColor=white)](#-installation)
+[![Hors-ligne](https://img.shields.io/badge/100%25-hors--ligne-0f766e?style=for-the-badge)](#)
+[![Chiffrement](https://img.shields.io/badge/AES--256--GCM-chiffré-1e293b?style=for-the-badge&logo=letsencrypt&logoColor=white)](#-confidentialité--sécurité)
+[![Langues](https://img.shields.io/badge/5-langues-0d9488?style=for-the-badge)](#-langues)
 
-> Version actuelle : **v216** · Application web autonome (un seul fichier `index.html`)
+**Votre budget familial, privé et hors-ligne — dans une seule page web.**
 
------
-
-## ✨ Fonctionnalités
-
-- **Suivi dépenses / revenus / épargne** par catégories et sous-catégories.
-- **Lecture automatique de relevés bancaires** (PDF, CSV, OFX) — détection des colonnes
-  Débit/Crédit, des montants et des dates, multi-banques (Société Générale, Crédit Agricole…).
-- **Scan de tickets de caisse** (photo ou PDF) avec OCR : magasin, date et **montant payé**
-  (réductions déduites) détectés automatiquement, et répartition possible en plusieurs catégories.
-- **Tableau de bord** : solde disponible, évolution, santé financière, prévisions du mois.
-- **Synchronisation famille** en temps réel (optionnelle).
-- **5 langues** : Français, English, Español, Italiano, Deutsch.
-- **100 % hors-ligne** une fois installée, avec sauvegarde / export de vos données.
+</div>
 
 -----
 
-## 📲 Installation (iPhone, Android, ordinateur)
+## ✨ Aperçu
 
-MagotBudget s’installe comme une application, sans passer par un store :
+**MagotBudget** est une application de gestion de budget *privacy-first* : vos données restent **chiffrées sur votre appareil**, l’app fonctionne **hors-ligne** (PWA installable), et elle lit automatiquement vos **tickets de caisse** et **relevés bancaires**.
 
-**iPhone / iPad (Safari)**
+Aucun compte obligatoire, aucune publicité, aucun pistage. Juste votre argent, sur votre téléphone.
 
-1. Ouvrir le lien de l’application dans **Safari**.
-1. Toucher le bouton **Partager** → **« Sur l’écran d’accueil »**.
-1. L’icône MagotBudget apparaît comme une vraie app.
-
-**Android (Chrome)**
-
-1. Ouvrir le lien dans **Chrome**.
-1. Menu **⋮** → **« Installer l’application »** (ou « Ajouter à l’écran d’accueil »).
-
-**Ordinateur (Chrome / Edge)**
-
-- Cliquer sur l’icône d’installation dans la barre d’adresse.
+> **Version actuelle : `v216`** · Application web autonome — un seul fichier `index.html`.
+> *(Pensez à mettre à jour ce numéro et le badge à chaque publication.)*
 
 -----
 
-## 🔄 Mises à jour
+## 📸 Captures d’écran
 
-L’application se met à jour **toute seule** : à chaque ouverture connectée, elle récupère la
-dernière version (stratégie *network-first* pour le HTML). Le numéro de version est visible
-dans la console et dans les Réglages.
-
-**Si l’écran reste blanc après une mise à jour** (cache figé ou fichier incomplet) :
-
-1. Un écran de secours propose **« Recharger (vider le cache) »** — touchez-le.
-1. Sinon : fermez complètement l’app (balayer pour la quitter) puis rouvrez-la.
-1. En dernier recours : ouvrez le lien dans le navigateur et **rechargez la page** deux fois.
-
------
-
-## 🚀 Déploiement (pour le mainteneur)
-
-L’app est hébergée sur **GitHub Pages**. À chaque nouvelle version :
-
-1. **Téléverser les DEUX fichiers à la racine du dépôt** :
-- `index.html` (l’application)
-- `firebase-messaging-sw.js` (notifications push — sinon elles ne fonctionnent pas)
-1. Vérifier que `index.html` est **complet** (≈ 2,6 Mo) — un fichier tronqué donne un écran blanc.
-1. Attendre 1–2 min que GitHub Pages publie, puis recharger en vidant le cache.
-
-> Notifications push sur écran verrouillé : nécessitent le plan **Firebase Blaze** et le
-> déploiement de la Cloud Function **depuis un ordinateur** (Firebase CLI).
+<div align="center">
+<table>
+  <tr>
+    <td align="center"><img src="./screenshots/accueil.png" width="220" alt="Accueil"><br><sub><b>Tableau de bord</b></sub></td>
+    <td align="center"><img src="./screenshots/saisie.png" width="220" alt="Saisie"><br><sub><b>Saisie & scan ticket</b></sub></td>
+    <td align="center"><img src="./screenshots/analyse.png" width="220" alt="Analyse"><br><sub><b>Analyse & santé financière</b></sub></td>
+  </tr>
+</table>
+<sub>↑ Remplacez ces images par vos propres captures (dossier <code>/screenshots</code>).</sub>
+</div>
 
 -----
 
-## 🔒 Confidentialité
+## 🚀 Fonctionnalités
 
-- Vos opérations sont **chiffrées (AES-256-GCM)** et stockées **localement** sur votre appareil.
-- Aucune donnée n’est envoyée à un serveur tiers à votre insu.
-- Le fichier de l’app est **autonome et lisible** : aucun traçage caché.
-
-### Services externes utilisés (et pourquoi)
-
-|Service                   |Usage                                  |Optionnel|
-|--------------------------|---------------------------------------|---------|
-|Google Vision / Mistral AI|OCR des tickets (vos propres clés)     |✅        |
-|Firebase (Firestore)      |Synchronisation famille / notifications|✅        |
-|jsDelivr (CDN)            |Bibliothèques PDF.js, Chart.js…        |—        |
-|Frankfurter / ER-API      |Taux de change                         |✅        |
-
------
-
-## 🛠️ Détails techniques
-
-- **Architecture** : application monopage autonome (HTML/CSS/JS dans un seul fichier).
-- **Hors-ligne** : Service Worker (cache versionné) + IndexedDB.
-- **Chiffrement** : AES-256-GCM, dérivation de clé PBKDF2.
-- **Graphiques** : Chart.js · **PDF** : PDF.js · **OCR** : Google Vision / Mistral / Tesseract.
+|                               |                                                                                                                                                  |
+|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+|💸 **Suivi complet**            |Dépenses, revenus et épargne par catégories et sous-catégories.                                                                                   |
+|🏦 **Lecture de relevés**       |Import PDF / CSV / OFX, détection auto des colonnes Débit/Crédit, montants et dates — multi-banques (Société Générale, Crédit Agricole…).         |
+|🧾 **Scan de tickets**          |OCR photo ou PDF : magasin, date et **montant payé** (réductions déduites) détectés automatiquement, répartition possible en plusieurs catégories.|
+|📊 **Tableau de bord**          |Solde disponible, évolution, **santé financière** notée /100, prévisions du mois.                                                                 |
+|👨‍👩‍👧 **Synchronisation famille**  |Partage en temps réel entre les membres du foyer *(optionnel)*.                                                                                   |
+|🎯 **Objectifs & convertisseur**|Objectifs d’épargne, convertisseur de devises intégré.                                                                                            |
+|📤 **Exports**                  |Excel et PDF pour archiver ou partager.                                                                                                           |
+|🌍 **5 langues**                |Français, English, Español, Italiano, Deutsch.                                                                                                    |
+|📴 **100 % hors-ligne**         |Une fois installée, fonctionne sans connexion.                                                                                                    |
 
 -----
 
-## 📜 Licence
+## 🔒 Confidentialité & sécurité
 
-© 2026 Loïc — Tous droits réservés.
-Application personnelle ; reproduction et redistribution non autorisées sans accord.
+> 🛡️ **Vos données ne quittent pas votre appareil.**
+> 
+> - Chiffrement **AES-256-GCM** (activé par défaut sur l’app native, via Android Keystore / iOS Keychain).
+> - Déverrouillage optionnel par **code** ou **Face ID**.
+> - Sauvegardes chiffrées par mot de passe (**PBKDF2, 600 000 itérations**).
+> - **Aucune publicité, aucun traçage publicitaire.** La synchronisation famille est *optionnelle* et anonyme.
+
+-----
+
+## 🧩 Architecture
+
+- **Un seul fichier** HTML / CSS / **JavaScript pur** (vanilla, sans framework).
+- **PWA** : Service Worker, stockage local `IndexedDB`, manifeste dynamique.
+- **App Android native** via **Capacitor** (version iOS en préparation).
+- **OCR** : Tesseract.js (standard) + Google Vision (haute précision).
+- **Synchronisation** *(optionnelle)* : Firebase (authentification anonyme + Firestore).
+
+-----
+
+## 📲 Installation
+
+**Sur iPhone / iPad (Safari)**
+
+1. Ouvrez l’application web.
+1. Touchez **Partager** → **Sur l’écran d’accueil**.
+
+**Sur Android (Chrome)**
+
+1. Ouvrez l’application web.
+1. Menu **⋮** → **Installer l’application**.
+
+> 💡 Une fois ajoutée à l’écran d’accueil, MagotBudget s’ouvre en plein écran et fonctionne hors-ligne.
+
+-----
+
+## 🌍 Langues
+
+🇫🇷 Français · 🇬🇧 English · 🇪🇸 Español · 🇮🇹 Italiano · 🇩🇪 Deutsch
+
+-----
+
+<details>
+<summary>🗺️ <b>Feuille de route</b></summary>
+
+- [ ] Publication App Store (iOS natif)
+- [ ] Notifications push (écran verrouillé)
+- [ ] Widgets de solde
+- [ ] Catégories personnalisables avancées
+
+</details>
+
+-----
+
+<div align="center">
+
+**MagotBudget** — *gestion économique du foyer.*
+
+<sub>Conçu et développé avec ❤️ · Application web autonome, hors-ligne et chiffrée.</sub>
+
+</div>
